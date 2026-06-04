@@ -194,7 +194,7 @@ const LOCALES: Record<string, any> = {
   },
   hi: {
     title: "झूठ और बहाना मशीन",
-    subtitle: "सटीक सामाजिक बफर एल्गोरिदम",
+    subtitle: "सटीк सामाजिक बफर एल्गोरिदम",
     step1: "1. श्रेणी चुनें",
     step2: "2. लक्षित संस्कृति / क्षेत्र",
     step3: "3. बहाने की तीव्रता",
@@ -224,12 +224,10 @@ export default function Home() {
   const [targetCulture, setTargetCulture] = useState<CultureType>("GLOBAL");
   const [intensity, setIntensity] = useState<number>(1);
   
-  // Çift Yönlü Çıktı Hafızası
   const [targetMessage, setTargetMessage] = useState("");
   const [userExplanation, setUserExplanation] = useState("");
   const [copied, setCopied] = useState(false);
 
-  // Tarayıcı dilini otomatik yakalama (PC ve Mobil uyumlu)
   useEffect(() => {
     const browserLang = navigator.language.split("-")[0];
     if (LOCALES[browserLang]) {
@@ -239,21 +237,18 @@ export default function Home() {
 
   const t = LOCALES[lang] || LOCALES["en"];
 
-  // Dinamik Yoğunluk Renk Atamaları (Slider için neon parlamalar)
   const getIntensityColor = () => {
     if (intensity === 1) return "text-emerald-400 accent-emerald-500";
     if (intensity === 2) return "text-orange-400 accent-orange-500";
     return "text-red-500 accent-red-500";
   };
 
-  // 🎲 MATEMATİKSEL KOMBİNASYON MOTORU (Token Assembler)
   const generateExcuse = () => {
     setCopied(false);
     
-    // Her havuzdan kullanıcının seçtiği kültür/global ve yoğunluğa göre filtreleme yapıyoruz
     const filterTokens = (pool: MazeretToken[]) => {
       const matched = pool.filter(t => (t.culture === targetCulture || t.culture === "GLOBAL") && t.intensity === intensity);
-      return matched.length > 0 ? matched : pool.filter(t => t.culture === "GLOBAL"); // Fallback
+      return matched.length > 0 ? matched : pool.filter(t => t.culture === "GLOBAL");
     };
 
     const gSelected = filterTokens(MAZERET_DATA.giriş)[Math.floor(Math.random() * filterTokens(MAZERET_DATA.giriş).length)];
@@ -262,15 +257,10 @@ export default function Home() {
     const sSelected = filterTokens(MAZERET_DATA.sonuç)[Math.floor(Math.random() * filterTokens(MAZERET_DATA.sonuç).length)];
     const kpSelected = filterTokens(MAZERET_DATA.kapanış)[Math.floor(Math.random() * filterTokens(MAZERET_DATA.kapanış).length)];
 
-    // Seçilen parçaları birleştir (Biri hedef dile, diğeri kullanıcının anladığı dile gidecek)
     const targetLangKey = lang as keyof typeof gSelected.text;
-    
-    // Arkadaşa gönderilecek nihai çıktı mesajı (Örn: Arapça veya İngilizce)
     const finalTarget = `${gSelected.text[targetLangKey]} ${oSelected.text[targetLangKey]} ${krSelected.text[targetLangKey]} ${sSelected.text[targetLangKey]} ${kpSelected.text[targetLangKey]}`;
     
-    // Kullanıcının ne gönderdiğini tam okuyabilmesi için kendi ana dilindeki karşılığı
-    const userLangKey = lang as keyof typeof gSelected.text;
-    const finalUser = `${gSelected.text[userLangKey]} ${oSelected.text[userLangKey]} ${krSelected.text[userLangKey]} ${sSelected.text[userLangKey]} ${kpSelected.text[userLangKey]}`;
+    const finalUser = `${gSelected.text[targetLangKey]} ${oSelected.text[targetLangKey]} ${krSelected.text[targetLangKey]} ${sSelected.text[targetLangKey]} ${kpSelected.text[targetLangKey]}`;
 
     setTargetMessage(finalTarget);
     setUserExplanation(finalUser);
@@ -285,7 +275,6 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-4 md:p-8 bg-zinc-950 antialiased text-zinc-100">
       
-      {/* Üst Sağ: Küresel Dil Seçim Dropdown'u */}
       <div className="w-full max-w-2xl flex justify-end pt-2">
         <select
           value={lang}
@@ -298,7 +287,6 @@ export default function Home() {
         </select>
       </div>
 
-      {/* Dinamik Başlık Banner Alanı */}
       <div className="w-full max-w-2xl text-center py-8">
         <h1 className="text-4xl font-black tracking-tight bg-gradient-to-r from-purple-400 via-zinc-200 to-emerald-400 bg-clip-text text-transparent transition-all duration-300">
           {t.title}
@@ -308,10 +296,8 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Ana Kontrol Paneli Kartı */}
       <div className="w-full max-w-xl bg-zinc-900/40 border border-zinc-800/80 rounded-2xl p-6 backdrop-blur-sm shadow-xl space-y-6">
         
-        {/* Adım 1: Kategori Seçimi */}
         <div>
           <label className="block text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-3">{t.step1}</label>
           <div className="grid grid-cols-2 gap-3">
@@ -334,7 +320,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Adım 2: Hedef Kültür / Bölge Seçimi */}
         <div>
           <label className="block text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-3">{t.step2}</label>
           <select
@@ -348,7 +333,6 @@ export default function Home() {
           </select>
         </div>
 
-        {/* Adım 3: Yoğunluk Sürgüsü */}
         <div>
           <div className="flex justify-between items-center mb-2">
             <label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t.step3}</label>
@@ -366,7 +350,6 @@ export default function Home() {
           />
         </div>
 
-        {/* TETİKLEYİCİ BUTON: Bahane Üret */}
         <button
           onClick={generateExcuse}
           className="w-full py-4 bg-gradient-to-r from-purple-600 to-emerald-600 hover:from-purple-500 hover:to-emerald-500 text-white font-bold text-sm rounded-xl shadow-lg transition-all duration-200 active:scale-[0.99] cursor-pointer"
@@ -376,11 +359,9 @@ export default function Home() {
 
       </div>
 
-      {/* ÇİFT YÖNLÜ ÇIKTI ALANI (Yalnızca bir mazeret üretildiğinde görünür) */}
       {targetMessage && (
-        <div className="w-full max-w-xl mt-6 bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 shadow-xl space-y-4 animate-fade-in">
+        <div className="w-full max-w-xl mt-6 bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 shadow-xl space-y-4">
           
-          {/* Kutucuk A: Arkadaşa Gönderilecek Mesaj (Kopyalanabilir) */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">{t.outputTarget}</span>
@@ -398,9 +379,8 @@ export default function Home() {
 
           <hr className="border-zinc-800" />
 
-          {/* Kutucuk B: Kullanıcının Ne Gönderdiğini Okuduğu Kısım (Sadece Okunabilir) */}
           <div className="space-y-2">
-            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">{u => t.outputUser}</span>
+            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">{t.outputUser}</span>
             <div className="w-full bg-zinc-950/50 border border-zinc-900 rounded-xl p-4 text-sm text-zinc-400 italic break-words">
               {userExplanation}
             </div>
